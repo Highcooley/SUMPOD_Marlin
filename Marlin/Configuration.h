@@ -115,9 +115,9 @@
 #define ENDSTOPPULLUPS // Comment this out (using // at the start of the line) to disable the endstop pullup resistors
 
 // The pullups are needed if you directly connect a mechanical endswitch between the signal and ground pins.
-const bool X_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
-const bool Y_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
-const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
+const bool X_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. [Highcooley's SUMPOD specific]
+const bool Y_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. [Highcooley's SUMPOD specific]
+const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. [Highcooley's SUMPOD specific]
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 #define X_ENABLE_ON 0
@@ -144,11 +144,11 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 #define Y_HOME_DIR 1
 #define Z_HOME_DIR 1
 
-#define min_software_endstops false //If true, axis won't move to coordinates less than HOME_POS.
-#define max_software_endstops false  //If true, axis won't move to coordinates greater than the defined lengths below.
-#define X_MAX_LENGTH 135 //[SUMPOD specific, CHANGE FOR YOUR SUMPOD]
-#define Y_MAX_LENGTH 135 //[SUMPOD specific, CHANGE FOR YOUR SUMPOD]
-#define Z_MAX_LENGTH 100 //[SUMPOD specific, CHANGE FOR YOUR SUMPOD]
+#define min_software_endstops true //If true, axis won't move to coordinates less than HOME_POS.
+#define max_software_endstops true  //If true, axis won't move to coordinates greater than the defined lengths below.
+#define X_MAX_LENGTH 142 //[Highcooley's SUMPOD specific, CHANGE FOR YOUR SUMPOD]
+#define Y_MAX_LENGTH 139 //[Highcooley's SUMPOD specific, CHANGE FOR YOUR SUMPOD]
+#define Z_MAX_LENGTH 112 //[Highcooley's SUMPOD specific, CHANGE FOR YOUR SUMPOD]
 
 // The position of the homing switches. Use MAX_LENGTH * -0.5 if the center should be 0, 0, 0
 #define X_HOME_POS X_MAX_LENGTH
@@ -161,7 +161,7 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 
 // default settings 
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {106.76,106.76,800,67.16}                    // default steps per unit for ultimaker //[SUMPOD specific]
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {106.76,106.76,800,69}         // default steps per unit for ultimaker //[Highcooley's SUMPOD specific]
 #define DEFAULT_MAX_FEEDRATE          {500, 500, 12, 45}    // (mm/sec) //[SUMPOD specific]    
 #define DEFAULT_MAX_ACCELERATION      {5000,5000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot. //[SUMPOD specific]
 
