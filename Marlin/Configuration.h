@@ -85,10 +85,15 @@
   #define PID_dT 0.128 //sampling period of the PID
 
 // If you are using a preconfigured hotend then you can use one of the value sets by uncommenting it
+// SUMPOD
+    #define  DEFAULT_Kp 23.22
+    #define  DEFAULT_Ki (11.016*PID_dT)   
+    #define  DEFAULT_Kd (12.27/PID_dT)
+    
 // Ultimaker
-    #define  DEFAULT_Kp  22.2
-    #define  DEFAULT_Ki (1.25*PID_dT)  
-    #define  DEFAULT_Kd (99/PID_dT)  
+//    #define  DEFAULT_Kp  22.2
+//    #define  DEFAULT_Ki (1.25*PID_dT)  
+//    #define  DEFAULT_Kd (99/PID_dT)  
 
 // Makergear
 //    #define  DEFAULT_Kp 7.0
