@@ -45,13 +45,19 @@
 #endif /* 99 */
 
 /****************************************************************************************
-* Gen7 v1.1, v1.2, v1.3 pin assignment
+* Gen7 v1.1, v1.2, v1.3, v1.4 pin assignment
 *
 ****************************************************************************************/
 
+
+#if MOTHERBOARD == 13
+#define MOTHERBOARD 11
+#define GEN7_VERSION 14 // v1.4
+#endif
+
 #if MOTHERBOARD == 12
 #define MOTHERBOARD 11
-#define GEN7_V_1_3
+#define GEN7_VERSION 13 // v1.3
 #endif
 
 #if MOTHERBOARD == 11
@@ -60,6 +66,10 @@
 #if !defined(__AVR_ATmega644P__) && !defined(__AVR_ATmega644__) && !defined(__AVR_ATmega1284P__)
 #error Oops! Make sure you have 'Gen7' selected from the 'Tools -> Boards' menu.
 
+#endif
+
+#ifndef GEN7_VERSION
+#define GEN7_VERSION 12 // v1.x
 #endif
 
 //x axis pins
@@ -81,7 +91,7 @@
 #define Z_DIR_PIN 25
 #define Z_ENABLE_PIN 24
 #define Z_MIN_PIN 1
-#define Z_MAX_PIN 
+#define Z_MAX_PIN 0
 
 //extruder pins
 #define E0_STEP_PIN 28
@@ -103,13 +113,19 @@
 #define SDSS -1 // SCL pin of I2C header
 #define LED_PIN -1
 
-#ifdef GEN7_V_1_3
+#if (GEN7_VERSION >= 13)
 // Gen7 v1.3 removed the fan pin
 #define FAN_PIN -1
 #else
 #define FAN_PIN 31
 #endif
 #define PS_ON_PIN 15
+
+#if (GEN7_VERSION < 14)
+// Gen 1.3 and earlier supplied thermistor power via PS_ON
+// Need to ignore the bad thermistor readings on those units
+#define BOGUS_TEMPERATURE_FAILSAFE_OVERRIDE
+#endif
 
 //our pin for debugging.
 #define DEBUG_PIN 0
@@ -231,24 +247,24 @@
 // #define RAMPS_V_1_3
 // #define RAMPS_V_1_0
 
-#ifdef MOTHERBOARD == 33 || MOTHERBOARD == 34
+#if MOTHERBOARD == 33 || MOTHERBOARD == 34
 
 #define X_STEP_PIN         54
 #define X_DIR_PIN          55
 #define X_ENABLE_PIN       38
-#define X_MIN_PIN           3 //3 //[SUMPOD specific]
+#define X_MIN_PIN           -1 //3 //[Highcooley's SUMPOD specific]
 #define X_MAX_PIN           2 //2 //[SUMPOD specific] 
 
 #define Y_STEP_PIN         60
 #define Y_DIR_PIN          61
 #define Y_ENABLE_PIN       56
-#define Y_MIN_PIN          14 //14 //[SUMPOD specific]
+#define Y_MIN_PIN          -1 //14 //[Highcooley's SUMPOD specific]
 #define Y_MAX_PIN          15 //15 //[SUMPOD specific]
 
 #define Z_STEP_PIN         46
 #define Z_DIR_PIN          48
 #define Z_ENABLE_PIN       62
-#define Z_MIN_PIN          18 //18 //[SUMPOD specific]
+#define Z_MIN_PIN          -1 //18 //[Highcooley's SUMPOD specific]
 #define Z_MAX_PIN          19 //19 //[SUMPOD specific]
 
 #define E0_STEP_PIN        26
@@ -348,8 +364,6 @@
 #define LED_PIN            13
 #define PS_ON_PIN          -1
 #define KILL_PIN           -1
-
-
 
 #ifdef RAMPS_V_1_0 // RAMPS_V_1_0
   #define HEATER_0_PIN     12    // RAMPS 1.0
@@ -892,22 +906,20 @@
 #endif
 
 //List of pins which to ignore when asked to change by gcode, 0 and 1 are RX and TX, do not mess with those!
-#define _E0_PINS E0_STEP_PIN, E0_DIR_PIN, E0_ENABLE_PIN
-#if EXTRUDERS == 3
-  #define _E1_PINS E1_STEP_PIN, E1_DIR_PIN, E1_ENABLE_PIN
-  #define _E2_PINS E2_STEP_PIN, E2_DIR_PIN, E2_ENABLE_PIN
-#elif EXTRUDERS == 2
-  #define _E1_PINS E1_STEP_PIN, E1_DIR_PIN, E1_ENABLE_PIN
-  #define _E2_PINS -1
-#elif EXTRUDERS == 1
-  #define _E1_PINS -1 
-  #define _E2_PINS -1
+#define _E0_PINS E0_STEP_PIN, E0_DIR_PIN, E0_ENABLE_PIN, HEATER_0_PIN, 
+#if EXTRUDERS > 1
+  #define _E1_PINS E1_STEP_PIN, E1_DIR_PIN, E1_ENABLE_PIN, HEATER_1_PIN,
 #else
-  #error Unsupported number of extruders
+  #define _E1_PINS
 #endif
+#if EXTRUDERS > 2
+  #define _E2_PINS E2_STEP_PIN, E2_DIR_PIN, E2_ENABLE_PIN, HEATER_2_PIN,
+#else
+  #define _E2_PINS
+#endif
+
 #define SENSITIVE_PINS {0, 1, X_STEP_PIN, X_DIR_PIN, X_ENABLE_PIN, X_MIN_PIN, X_MAX_PIN, Y_STEP_PIN, Y_DIR_PIN, Y_ENABLE_PIN, Y_MIN_PIN, Y_MAX_PIN, Z_STEP_PIN, Z_DIR_PIN, Z_ENABLE_PIN, Z_MIN_PIN, Z_MAX_PIN, LED_PIN, PS_ON_PIN, \
-                        HEATER_0_PIN, HEATER_1_PIN, HEATER_2_PIN, \
                         HEATER_BED_PIN, FAN_PIN,                  \
-                        _E0_PINS, _E1_PINS, _E2_PINS,             \
+                        _E0_PINS _E1_PINS _E2_PINS             \
                         TEMP_0_PIN, TEMP_1_PIN, TEMP_2_PIN, TEMP_BED_PIN }
 #endif
